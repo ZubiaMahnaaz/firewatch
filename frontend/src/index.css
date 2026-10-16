@@ -1,0 +1,104 @@
+@import "tailwindcss";
+
+@layer base {
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #15191D;
+    color: #F4F1E9;
+    font-family: 'Manrope', 'Inter', sans-serif;
+  }
+
+  /* Safe area helpers */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  /* Custom subtle scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #15191D;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #323B43;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #68B5E8;
+  }
+}
+
+/* Custom font utilities matching Stitch designs */
+.font-headline {
+  font-family: 'Space Grotesk', sans-serif;
+}
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+.font-body {
+  font-family: 'Manrope', 'Inter', sans-serif;
+}
+
+/* Leaflet dark theme tweaks */
+.leaflet-container {
+  background-color: #0F1316 !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+.leaflet-bar a {
+  background-color: #252C32 !important;
+  color: #F4F1E9 !important;
+  border-bottom: 1px solid #323B43 !important;
+}
+.leaflet-bar a:hover {
+  background-color: #2E373F !important;
+  color: #FFB547 !important;
+}
+.leaflet-popup-content-wrapper {
+  background: #1C2227 !important;
+  color: #F4F1E9 !important;
+  border: 1px solid #323B43 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6) !important;
+}
+.leaflet-popup-tip {
+  background: #1C2227 !important;
+}
+
+/* Dark OpenStreetMap Tiles matching FireWatch tactical charcoal UI */
+.dark-osm-tiles,
+.dark-osm-tiles img,
+.leaflet-tile-pane .dark-osm-tiles img {
+  filter: invert(100%) hue-rotate(180deg) brightness(88%) contrast(92%) !important;
+}
+
+/* Custom styling for Leaflet attribution control */
+.leaflet-control-attribution {
+  background: rgba(28, 34, 39, 0.9) !important;
+  color: #9BA3AF !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+  border: 1px solid #323B43 !important;
+  margin: 0 !important;
+  z-index: 450 !important;
+}
+.leaflet-control-attribution a {
+  color: #68B5E8 !important;
+  text-decoration: none !important;
+}
+.leaflet-control-attribution a:hover {
+  text-decoration: underline !important;
+}
+.leaflet-bottom.leaflet-right {
+  bottom: 34px !important;
+  right: 10px !important;
+}
+

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta content="mobile_tab" name="shell-type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #15191D;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+      main > :first-child {
+        margin-top: 0 !important;
+      }
+      main > :last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            console: {
+              bg: "#15191D",
+              surface: "#1A2026",
+              elevated: "#252C32",
+              border: "#323B43",
+              borderSubtle: "#273038",
+              text: "#F4F1E9",
+              muted: "#9BA3AF",
+              dim: "#6B7280"
+            },
+            accent: {
+              amber: "#E7B94F",
+              amberDark: "#473812",
+              amberLight: "#FBF0D1",
+              red: "#F04438",
+              redDark: "#491816",
+              redLight: "#FFE4E2",
+              blue: "#68B5E8",
+              blueDark: "#103248",
+              green: "#55B887",
+              greenDark: "#133725"
+            }
+          },
+          fontFamily: {
+            display: ["Space Grotesk", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"],
+            body: ["Inter", "Manrope", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-console-bg font-body text-console-text antialiased flex flex-col min-h-screen selection:bg-accent-amber/30 selection:text-console-text">
+<!-- Header Console -->
+<header class="fixed top-0 w-full z-50 bg-console-bg/95 backdrop-blur-md border-b border-console-border pt-safe">
+<div class="h-16 px-4 flex items-center justify-between gap-2">
+<div class="flex items-center gap-2.5 min-w-0">
+<img alt="FireWatch Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1VLQ1VaoiA1YXMZ5ADm6EWF0gqihW_vfs6tyV_ENkLcTx3Z-LbVrFYYOSOPbxdLiTTZT7fGMb8oMto0HQjOWc3TcMeuXSW_VXosdpJzCiwpBh68YcjVyvkLncILJxkQLW85RUhNe1bRU99s9ff1UDXlPSm7qJdcOo_z1waq1w6UA7LreYgbvRHgvKP7ClIA-yz8JZMfW8gfhWwAiSR4lbh_42ICs-7RVHbmNj837a7K"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-display text-[17px] text-console-text font-bold tracking-tight truncate">FireWatch</span>
+<span class="font-mono text-[10px] px-1.5 py-0.2 border border-accent-blue/30 rounded bg-accent-blueDark text-accent-blue font-semibold uppercase tracking-wider">GIS-NRT</span>
+</div>
+<div class="flex items-center gap-1.5 truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-accent-red animate-pulse flex-shrink-0"></span>
+<span class="font-mono text-[11px] text-console-muted truncate">NASA FIRMS MODIS/VIIRS Active Ingestion - NRT</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button aria-label="Upload CSV" class="w-9 h-9 flex items-center justify-center rounded-md border border-console-border bg-console-elevated text-console-muted hover:text-console-text hover:border-console-dim transition-colors">
+<span class="material-symbols-outlined text-[19px]">upload_file</span>
+</button>
+<button aria-label="Refresh Telemetry" class="w-9 h-9 flex items-center justify-center rounded-md border border-console-border bg-console-elevated text-console-muted hover:text-console-text hover:border-console-dim transition-colors">
+<span class="material-symbols-outlined text-[19px]">sync</span>
+</button>
+<div class="flex items-center pl-1">
+<img alt="Profile" class="w-8 h-8 rounded-md object-cover ring-1 ring-console-border flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLpYeFSrItb-iW1tU29ngdMs0nfgMe2oBdU09F8A7-qiA6rkYuu2n33qM6YL16rBrxZt7JZcDRtM58aoxXrOiChECKnSX9n1TlWOrk5Eik7da_FJR5ogMH-d0xS_vGEWISxYR5yqbaXZpDAs_sDmMDlqxXnpiMpZ0-um3vsN2mdSwov66O2Lvqfmghekb90QFztLU4CsUkVM6Umq4sgGcFIBDVqpsG5rH3Oapfz1pz"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex flex-col relative w-full pt-16 pb-24 bg-console-bg flex-grow">
+<div class="flex flex-col w-full space-y-4 px-3.5 pt-3">
+<!-- 1. Operational Directive & Non-Emergency Disclaimer -->
+<div class="rounded-lg p-3.5 bg-accent-amberDark/60 border border-accent-amber/40 shadow-sm relative overflow-hidden">
+<div class="absolute -top-12 -right-12 w-36 h-36 bg-accent-amber/5 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded bg-accent-amber/20 border border-accent-amber/50 text-accent-amber flex-shrink-0 flex items-center justify-center mt-0.5">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-display text-[14px] font-bold tracking-wide text-accent-amber uppercase">Operational Directive</span>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-accent-amber text-[#15191D] font-bold uppercase tracking-wider">Non-Tactical</span>
+</div>
+<p class="font-body text-[13px] text-console-text/95 mt-1.5 leading-snug">
+<span class="font-semibold text-accent-amber">SYSTEM STATUS: ANALYST DECISION-SUPPORT HEURISTIC ONLY.</span> 
+              FireWatch is an academic research &amp; rapid-triage heuristic interface. It does <em class="text-accent-amber not-italic underline font-medium">NOT</em> independently verify active wildfires, compute forward flame-front vectors, or substitute for official 911 dispatch, CalFire, or USFS incident command operations.
+            </p>
+</div>
+</div>
+</div>
+<!-- 2. Scientific Integrity & Bias Matrix Header Card -->
+<div class="rounded-lg bg-console-elevated border border-console-border p-3.5 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue text-[18px]">verified_user</span>
+<span class="font-display text-[15px] font-bold text-console-text">Scientific Integrity &amp; Bias Matrix</span>
+</div>
+<span class="font-mono text-[10px] text-accent-blue font-semibold bg-accent-blueDark border border-accent-blue/30 px-2 py-0.5 rounded">NASA EOS-TR-44</span>
+</div>
+<p class="font-body text-[12px] text-console-muted leading-relaxed">
+          Mission-critical environmental intelligence demands transparent telemetry boundaries. Satellite radiometers provide synoptic observations subject to thermodynamic, spatial, and orbital constraints.
+        </p>
+</div>
+<!-- 3. Systematic Limitations Matrix -->
+<div class="flex flex-col space-y-2.5">
+<div class="flex items-center justify-between px-0.5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-amber text-[18px]">rule</span>
+<h2 class="font-display text-[15px] font-bold text-console-text">Systematic Limitations</h2>
+</div>
+<span class="font-mono text-[10px] text-console-dim uppercase tracking-wider">4 Intrinsic Phenomena</span>
+</div>
+<!-- Cards Grid -->
+<div class="grid grid-cols-1 gap-2.5">
+<!-- Card 1 -->
+<div class="rounded-lg p-3 bg-console-elevated border border-console-border flex flex-col space-y-2">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-2.5">
+<div class="w-7 h-7 rounded bg-console-bg border border-console-border flex items-center justify-center text-accent-blue flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">cloud_off</span>
+</div>
+<div>
+<span class="font-mono text-[10px] text-console-dim uppercase font-semibold">Phenomenon 01</span>
+<h3 class="font-display text-[14px] font-bold text-console-text">Cloud &amp; Heavy Smoke Obscuration</h3>
+</div>
+</div>
+<span class="font-mono text-[10px] px-2 py-0.5 rounded border border-accent-red/50 bg-accent-redDark text-accent-red font-semibold tracking-wide">FN Risk: High</span>
+</div>
+<p class="font-body text-[12.5px] text-console-muted leading-snug">
+              Thick stratus cloud decks, maritime fog, and pyrocumulonimbus plumes completely attenuate mid-infrared (3.9µm / 4.0µm) radiant flux. Sub-canopy smoldering or fast-moving fronts blanketed under dense aerosol columns may yield zero sensor signal (false negatives).
+            </p>
+<div class="flex items-center justify-between pt-1 border-t border-console-borderSubtle">
+<span class="font-mono text-[10.5px] text-console-dim">Spectral Attenuation: 3.9–4.0µm MWIR</span>
+<span class="font-mono text-[10.5px] text-accent-blue font-medium">MOD14/MYD14 §2.4</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="rounded-lg p-3 bg-console-elevated border border-console-border flex flex-col space-y-2">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-2.5">
+<div class="w-7 h-7 rounded bg-console-bg border border-console-border flex items-center justify-center text-accent-blue flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+</div>
+<div>
+<span class="font-mono text-[10px] text-console-dim uppercase font-semibold">Phenomenon 02</span>
+<h3 class="font-display text-[14px] font-bold text-console-text">Orbit Timing &amp; Scan Geometry</h3>
+</div>
+</div>
+<span class="font-mono text-[10px] px-2 py-0.5 rounded border border-accent-amber/40 bg-accent-amberDark/60 text-accent-amber font-semibold tracking-wide">Temporal Latency</span>
+</div>
+<p class="font-body text-[12.5px] text-console-muted leading-snug">
+              Polar-orbiting spacecraft (VIIRS on Suomi-NPP/NOAA-20/NOAA-21; MODIS on Terra/Aqua) achieve sun-synchronous nadir overpasses roughly 2 to 4 times per 24h diurnal cycle. Rapid diurnal ignitions occurring between orbital tracks remain undetected until the subsequent transit.
+            </p>
+<div class="flex items-center justify-between pt-1 border-t border-console-borderSubtle">
+<span class="font-mono text-[10.5px] text-console-dim">Window Interval: 3–6 hrs between passes</span>
+<span class="font-mono text-[10.5px] text-accent-blue font-medium">Suomi-NPP / NOAA-20</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="rounded-lg p-3 bg-console-elevated border border-console-border flex flex-col space-y-2">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-2.5">
+<div class="w-7 h-7 rounded bg-console-bg border border-console-border flex items-center justify-center text-accent-blue flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">crop_free</span>
+</div>
+<div>
+<span class="font-mono text-[10px] text-console-dim uppercase font-semibold">Phenomenon 03</span>
+<h3 class="font-display text-[14px] font-bold text-console-text">Pixel Footprint &amp; Geolocation</h3>
+</div>
+</div>
+<span class="font-mono text-[10px] px-2 py-0.5 rounded border border-console-border bg-console-bg text-console-muted font-semibold tracking-wide">Nadir: 375m / 1000m</span>
+</div>
+<p class="font-body text-[12.5px] text-console-muted leading-snug">
+              VIIRS I-band offers 375m nadir resolution; MODIS is 1km. Off-nadir scans experience optical bow-tie distortion and pixel elongation. Coordinate pins signify the geometric pixel centroid, never the sub-pixel flaming front perimeter or exact boundary line.
+            </p>
+<div class="flex items-center justify-between pt-1 border-t border-console-borderSubtle">
+<span class="font-mono text-[10.5px] text-console-dim">Spatial Error: ±187.5m (VIIRS) to ±500m</span>
+<span class="font-mono text-[10.5px] text-accent-blue font-medium">Bow-tie Correction</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="rounded-lg p-3 bg-console-elevated border border-console-border flex flex-col space-y-2">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-2.5">
+<div class="w-7 h-7 rounded bg-console-bg border border-console-border flex items-center justify-center text-accent-blue flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">factory</span>
+</div>
+<div>
+<span class="font-mono text-[10px] text-console-dim uppercase font-semibold">Phenomenon 04</span>
+<h3 class="font-display text-[14px] font-bold text-console-text">Industrial Confounders &amp; Refraction</h3>
+</div>
+</div>
+<span class="font-mono text-[10px] px-2 py-0.5 rounded border border-accent-red/50 bg-accent-redDark text-accent-red font-semibold tracking-wide">FP Risk: High</span>
+</div>
+<p class="font-body text-[12.5px] text-console-muted leading-snug">
+              Natural gas flaring, petrochemical catalytic crackers, scrap-metal foundries, and solar glare glinting from corrugated metal agriculture roofing frequently mimic thermal radiometric brightness signatures, triggering elevated Fire Radiative Power (FRP).
+            </p>
+<div class="flex items-center justify-between pt-1 border-t border-console-borderSubtle">
+<span class="font-mono text-[10.5px] text-console-dim">Known Artifacts: Static Flare Inventory</span>
+<span class="font-mono text-[10.5px] text-accent-blue font-medium">MODIS Thermal Mask</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. Sensor Footprint Comparison Diagram -->
+<div class="rounded-lg p-3.5 bg-console-elevated border border-console-border shadow-sm">
+<div class="flex items-center justify-between mb-2.5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue text-[18px]">network_cell</span>
+<h3 class="font-display text-[14px] font-bold text-console-text">Sensor Footprint Comparison</h3>
+</div>
+<span class="font-mono text-[10px] text-console-muted">Sub-pixel Resolution</span>
+</div>
+<div class="w-full bg-console-bg rounded border border-console-border p-3">
+<svg class="w-full h-24" fill="none" viewbox="0 0 320 80">
+<!-- MODIS 1000m box -->
+<rect class="fill-console-surface stroke-console-dim" height="64" rx="3" stroke-dasharray="3 3" stroke-width="1.2" width="64" x="8" y="8"></rect>
+<text class="fill-console-muted font-mono text-[9px] font-semibold" text-anchor="middle" x="40" y="38">MODIS</text>
+<text class="fill-console-dim font-mono text-[8px]" text-anchor="middle" x="40" y="50">1000m × 1000m</text>
+<!-- Arrow -->
+<path class="stroke-console-dim" d="M 80 40 L 98 40" stroke-linecap="round" stroke-width="1.5"></path>
+<polyline class="stroke-console-dim" fill="none" points="94,36 99,40 94,44" stroke-width="1.5"></polyline>
+<!-- VIIRS 375m box -->
+<rect class="fill-accent-blueDark stroke-accent-blue" height="30" rx="2" stroke-width="1.2" width="30" x="110" y="25"></rect>
+<text class="fill-accent-blue font-mono text-[8px] font-bold" text-anchor="middle" x="125" y="41">VIIRS</text>
+<text class="fill-accent-blue font-mono text-[6.5px]" text-anchor="middle" x="125" y="50">375m</text>
+<!-- Legend / Centroid pinpoint -->
+<circle class="fill-accent-red animate-pulse" cx="195" cy="40" r="3.5"></circle>
+<circle class="stroke-accent-red fill-accent-red/10" cx="195" cy="40" r="13" stroke-dasharray="2 2" stroke-width="1"></circle>
+<text class="fill-console-text font-display text-[11px] font-bold" x="218" y="37">Pixel Centroid (Lat/Lon)</text>
+<text class="fill-console-muted font-body text-[9.5px]" x="218" y="50">Sub-pixel flaming perimeter</text>
+</svg>
+</div>
+<div class="mt-2 flex items-center justify-between text-console-muted font-mono text-[10.5px]">
+<span>VIIRS offers ~7x areal reduction vs MODIS</span>
+<span class="text-accent-blue font-medium">Bilinear Nadir</span>
+</div>
+</div>
+<!-- 5. False-Positive Mitigation Pipeline -->
+<div class="rounded-lg p-3.5 bg-console-elevated border border-console-border shadow-sm flex flex-col space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue text-[18px]">account_tree</span>
+<h2 class="font-display text-[14px] font-bold text-console-text">False-Positive Mitigation Pipeline</h2>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-console-bg border border-console-border text-accent-blue font-semibold">STAGE 1-3</span>
+</div>
+<p class="font-body text-[12.5px] text-console-muted leading-snug">
+          Raw FIRMS thermal radiative vectors pass through a deterministic three-tiered heuristic filter to deprioritize industrial noise and non-wildfire radiative energy.
+        </p>
+<!-- Stepper Pipeline -->
+<div class="flex flex-col space-y-2">
+<!-- Stage 1 -->
+<div class="flex items-start gap-2.5 p-2.5 rounded bg-console-bg border border-console-border">
+<div class="w-5 h-5 rounded bg-accent-blueDark border border-accent-blue/40 text-accent-blue flex items-center justify-center font-mono text-[10px] font-bold flex-shrink-0 mt-0.5">
+              1
+            </div>
+<div class="flex flex-col min-w-0 flex-grow">
+<div class="flex items-center justify-between">
+<span class="font-display text-[13px] font-semibold text-console-text">Static Heat Signature Masking</span>
+<span class="font-mono text-[10px] text-accent-blue">1.2km Excl.</span>
+</div>
+<p class="font-body text-[11.5px] text-console-muted mt-0.5 leading-snug">
+                Automated spatial join against the Global Gas Flare Catalog (GGFR) and NOAA persistent industrial thermal source database. Hits within 1,200m buffer are tagged <code class="text-accent-amber font-mono text-[10.5px]">CONF_FP_INDUSTRIAL</code> and downweighted.
+              </p>
+</div>
+</div>
+<!-- Stage 2 -->
+<div class="flex items-start gap-2.5 p-2.5 rounded bg-console-bg border border-console-border">
+<div class="w-5 h-5 rounded bg-accent-blueDark border border-accent-blue/40 text-accent-blue flex items-center justify-center font-mono text-[10px] font-bold flex-shrink-0 mt-0.5">
+              2
+            </div>
+<div class="flex flex-col min-w-0 flex-grow">
+<div class="flex items-center justify-between">
+<span class="font-display text-[13px] font-semibold text-console-text">Land Cover Zoning Cross-Ref</span>
+<span class="font-mono text-[10px] text-accent-blue">USGS NLCD</span>
+</div>
+<p class="font-body text-[11.5px] text-console-muted mt-0.5 leading-snug">
+                Cross-validation against USGS National Land Cover Database 30m rasters. Identifies agricultural crop clearing, controlled burn permits, and open-pit aggregate mines versus wildland-urban interface (WUI) canopy fuels.
+              </p>
+</div>
+</div>
+<!-- Stage 3 -->
+<div class="flex items-start gap-2.5 p-2.5 rounded bg-console-bg border border-console-border">
+<div class="w-5 h-5 rounded bg-accent-blueDark border border-accent-blue/40 text-accent-blue flex items-center justify-center font-mono text-[10px] font-bold flex-shrink-0 mt-0.5">
+              3
+            </div>
+<div class="flex flex-col min-w-0 flex-grow">
+<div class="flex items-center justify-between">
+<span class="font-display text-[13px] font-semibold text-console-text">Human Analyst Triage (Tier-1)</span>
+<span class="font-mono text-[10px] text-accent-green">Duty Desk</span>
+</div>
+<p class="font-body text-[11.5px] text-console-muted mt-0.5 leading-snug">
+                Manual geospatial review of GOES-16/18 ABI full-disk 5-minute cadence imagery, paired with near-ground automated weather stations (RAWS) wind vectors before priority escalation to emergency operations dispatch.
+              </p>
+</div>
+</div>
+</div>
+</div>
+<!-- 6. Explainable Scoring Heuristic Formulation -->
+<div class="rounded-lg p-3.5 bg-console-elevated border border-console-border shadow-sm flex flex-col space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-amber text-[18px]">functions</span>
+<h2 class="font-display text-[14px] font-bold text-console-text">Explainable Scoring Heuristic</h2>
+</div>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-console-bg border border-console-border text-accent-amber font-semibold">FORMULA SPEC</span>
+</div>
+<!-- Formula Code Box -->
+<div class="p-2.5 rounded bg-console-bg border border-console-border font-mono text-[11px] text-accent-blue overflow-x-auto select-all">
+<code>Priority = w₁·Norm_FRP + w₂·Recency_Decay + w₃·Conf_Weight + w₄·Persistence</code>
+</div>
+<!-- Weight Breakdown Table -->
+<div class="flex flex-col space-y-1.5 pt-0.5">
+<div class="flex items-center justify-between text-console-dim font-mono text-[10px] pb-1 border-b border-console-borderSubtle">
+<span>PARAMETER</span>
+<span>WEIGHT</span>
+<span class="text-right">RATIONALE</span>
+</div>
+<!-- FRP Weight -->
+<div class="flex items-center justify-between p-1.5 rounded bg-console-bg border border-console-borderSubtle text-console-text">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="w-2 h-2 rounded-full bg-accent-red flex-shrink-0"></span>
+<span class="font-mono text-[11px] font-medium truncate">Norm_FRP (w₁)</span>
+</div>
+<span class="font-mono text-[11px] font-bold px-1.5 py-0.2 bg-console-elevated rounded border border-console-border text-accent-amber">0.35</span>
+<span class="font-body text-[11px] text-console-muted text-right truncate max-w-[140px]">Megawatt radiant intensity</span>
+</div>
+<!-- Recency Decay -->
+<div class="flex items-center justify-between p-1.5 rounded bg-console-bg border border-console-borderSubtle text-console-text">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="w-2 h-2 rounded-full bg-accent-amber flex-shrink-0"></span>
+<span class="font-mono text-[11px] font-medium truncate">Recency_Decay (w₂)</span>
+</div>
+<span class="font-mono text-[11px] font-bold px-1.5 py-0.2 bg-console-elevated rounded border border-console-border text-accent-amber">0.25</span>
+<span class="font-body text-[11px] text-console-muted text-right truncate max-w-[140px]">Exp. half-life (t₁/₂ = 6.0h)</span>
+</div>
+<!-- Repeat Persistence -->
+<div class="flex items-center justify-between p-1.5 rounded bg-console-bg border border-console-borderSubtle text-console-text">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="w-2 h-2 rounded-full bg-accent-blue flex-shrink-0"></span>
+<span class="font-mono text-[11px] font-medium truncate">Persistence (w₃)</span>
+</div>
+<span class="font-mono text-[11px] font-bold px-1.5 py-0.2 bg-console-elevated rounded border border-console-border text-accent-amber">0.20</span>
+<span class="font-body text-[11px] text-console-muted text-right truncate max-w-[140px]">Multi-pass detections</span>
+</div>
+<!-- Confidence Weight -->
+<div class="flex items-center justify-between p-1.5 rounded bg-console-bg border border-console-borderSubtle text-console-text">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="w-2 h-2 rounded-full bg-accent-green flex-shrink-0"></span>
+<span class="font-mono text-[11px] font-medium truncate">Conf_Weight (w₄)</span>
+</div>
+<span class="font-mono text-[11px] font-bold px-1.5 py-0.2 bg-console-elevated rounded border border-console-border text-accent-amber">0.20</span>
+<span class="font-body text-[11px] text-console-muted text-right truncate max-w-[140px]">Sensor confidence [0-1]</span>
+</div>
+</div>
+<!-- Interactive Heuristic Simulation Card -->
+<div class="rounded border border-console-border bg-console-bg p-2.5 mt-1 flex flex-col space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-mono text-[11px] font-medium text-console-text">Normalizer Simulation</span>
+<button class="text-accent-amber hover:text-accent-amberLight transition-colors flex items-center gap-1 font-mono text-[10.5px]" id="calc-refresh-btn">
+<span class="material-symbols-outlined text-[13px]">tune</span> Sample Val
+            </button>
+</div>
+<div class="flex items-center justify-between bg-console-surface p-2 rounded border border-console-borderSubtle">
+<div>
+<span class="font-mono text-[10px] text-console-muted">Heuristic Score:</span>
+<div class="font-display text-[22px] font-bold text-accent-amber" id="simulated-score">84.2 <span class="font-mono text-[11px] font-normal text-console-dim">/ 100</span></div>
+</div>
+<div class="text-right">
+<span class="font-mono text-[10px] px-2 py-0.5 rounded border border-accent-red/50 bg-accent-redDark text-accent-red font-bold uppercase tracking-wider" id="simulated-tier">Tier-1 Critical</span>
+<p class="font-mono text-[10px] text-console-muted mt-1" id="simulated-meta">FRP: 142 MW | Age: 42m</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 7. Data Provenance & NASA FIRMS Citation -->
+<div class="rounded-lg p-3.5 bg-console-elevated border border-console-border shadow-sm flex flex-col space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-blue text-[18px]">dataset</span>
+<h2 class="font-display text-[14px] font-bold text-console-text">Data Provenance &amp; Attribution</h2>
+</div>
+<span class="font-mono text-[10px] text-accent-blue font-semibold border border-accent-blue/30 bg-accent-blueDark px-1.5 py-0.5 rounded">OPEN DATA</span>
+</div>
+<p class="font-body text-[12px] text-console-muted leading-relaxed">
+          We acknowledge the use of data and imagery from LANCE FIRMS operated by NASA’s Earth Science Data and Information System (ESDIS) with funding provided by NASA/HQ.
+        </p>
+<!-- Source Chips & Specs -->
+<div class="grid grid-cols-2 gap-1.5 font-mono text-[10.5px]">
+<div class="p-2 rounded bg-console-bg border border-console-borderSubtle flex flex-col">
+<span class="text-console-dim text-[9.5px]">SENSOR ARRAY</span>
+<span class="text-console-text font-semibold truncate">VIIRS &amp; MODIS</span>
+</div>
+<div class="p-2 rounded bg-console-bg border border-console-borderSubtle flex flex-col">
+<span class="text-console-dim text-[9.5px]">PLATFORM INGESTION</span>
+<span class="text-console-text font-semibold truncate">NASA LANCE / FIRMS</span>
+</div>
+<div class="p-2 rounded bg-console-bg border border-console-borderSubtle flex flex-col">
+<span class="text-console-dim text-[9.5px]">PIPELINE CORE</span>
+<span class="text-console-text font-semibold truncate">Python / GeoPandas</span>
+</div>
+<div class="p-2 rounded bg-console-bg border border-console-borderSubtle flex flex-col">
+<span class="text-console-dim text-[9.5px]">SYSTEM BUILD</span>
+<span class="text-console-text font-semibold truncate">v1.2-alpha | 2025.1</span>
+</div>
+</div>
+<!-- Official Citation Box -->
+<div class="p-2.5 rounded bg-console-bg border border-console-border text-console-muted font-mono text-[10.5px] leading-relaxed select-all">
+<p class="italic text-console-text/90">
+            "NASA Earthdata. (2025). Near Real-Time Active Fire Data: VIIRS 375m / MODIS 1km. Earth Science Data and Information System (ESDIS) Project. Greenbelt, MD: NASA Goddard Space Flight Center."
+          </p>
+</div>
+<!-- Acknowledgment Sign-off -->
+<div class="flex items-center justify-between pt-1 text-console-dim font-mono text-[10px]">
+<span class="flex items-center gap-1 text-accent-green">
+<span class="material-symbols-outlined text-[13px]">policy</span>
+            Complies with Open Data Policy
+          </span>
+<span class="text-console-dim">FireWatch Academic</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Interactive Script for Simulation Demo -->
+<script>
+    (function initPlayground() {
+      const btn = document.getElementById('calc-refresh-btn');
+      const scoreEl = document.getElementById('simulated-score');
+      const tierEl = document.getElementById('simulated-tier');
+      const metaEl = document.getElementById('simulated-meta');
+
+      if (!btn || !scoreEl || !tierEl) return;
+
+      const scenarios = [
+        { score: '84.2', tier: 'Tier-1 Critical', bg: 'bg-accent-redDark', border: 'border-accent-red/50', fg: 'text-accent-red', meta: 'FRP: 142 MW | Age: 42m' },
+        { score: '62.7', tier: 'Tier-2 Priority', bg: 'bg-accent-amberDark/70', border: 'border-accent-amber/50', fg: 'text-accent-amber', meta: 'FRP: 68 MW | Age: 1.8h' },
+        { score: '38.4', tier: 'Tier-3 Advisory', bg: 'bg-accent-blueDark', border: 'border-accent-blue/50', fg: 'text-accent-blue', meta: 'FRP: 18 MW | Age: 3.4h' },
+        { score: '18.9', tier: 'Tier-4 Routine', bg: 'bg-console-bg', border: 'border-console-border', fg: 'text-console-muted', meta: 'FRP: 6 MW | Age: 5.1h' }
+      ];
+      let idx = 0;
+
+      btn.addEventListener('click', function() {
+        idx = (idx + 1) % scenarios.length;
+        const current = scenarios[idx];
+        scoreEl.innerHTML = current.score + ' <span class="font-mono text-[11px] font-normal text-console-dim">/ 100</span>';
+        tierEl.textContent = current.tier;
+        tierEl.className = 'font-mono text-[10px] px-2 py-0.5 rounded border font-bold uppercase tracking-wider ' + current.bg + ' ' + current.border + ' ' + current.fg;
+        if (metaEl) metaEl.textContent = current.meta;
+      });
+    })();
+  </script>
+<!-- Bottom Navigation Bar: Dark Console with Active Caveats Tab -->
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-console-bg/95 backdrop-blur-md border-t border-console-border">
+<div class="flex items-center justify-around h-16 px-1">
+<a class="flex flex-col items-center justify-center w-16 h-12 text-console-muted hover:text-console-text transition-colors" data-path="overview-triage" href="#">
+<span class="material-symbols-outlined text-[20px]">radar</span>
+<span class="font-mono text-[10px] mt-1">Overview</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-console-muted hover:text-console-text transition-colors" data-path="priority-queue" href="#">
+<span class="material-symbols-outlined text-[20px]">table_chart</span>
+<span class="font-mono text-[10px] mt-1">Queue</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-console-muted hover:text-console-text transition-colors" data-path="data-validation" href="#">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+<span class="font-mono text-[10px] mt-1">Validation</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-console-muted hover:text-console-text transition-colors" data-path="analytics-trends" href="#">
+<span class="material-symbols-outlined text-[20px]">query_stats</span>
+<span class="font-mono text-[10px] mt-1">Analytics</span>
+</a>
+<!-- Active Tab: Caveats -->
+<a class="flex flex-col items-center justify-center w-16 h-12 text-accent-amber font-semibold relative" data-path="evaluation-limitations" href="#">
+<span class="absolute -top-1 w-6 h-0.5 bg-accent-amber rounded-full"></span>
+<span class="material-symbols-outlined text-[20px] text-accent-amber">info</span>
+<span class="font-mono text-[10px] mt-1 text-accent-amber">Caveats</span>
+</a>
+</div>
+</nav>
+</body></html>

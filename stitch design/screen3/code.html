@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<meta content="mobile_tab" name="shell-type"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#111417",
+            "surface": "#15191D",
+            "surface-container-low": "#1C2227",
+            "surface-container": "#20262C",
+            "surface-container-high": "#252C32",
+            "surface-container-highest": "#2D353D",
+            "border-line": "#323B43",
+            "outline": "#45505B",
+            "on-surface": "#F4F1E9",
+            "on-surface-variant": "#9BA3AF",
+            "primary": "#FFB547",
+            "primary-container": "#2E2413",
+            "on-primary": "#1A1000",
+            "thermal-red": "#F04438",
+            "thermal-red-container": "#3D1715",
+            "thermal-amber": "#FFB547",
+            "thermal-amber-container": "#38270F",
+            "analytical-blue": "#68B5E8",
+            "analytical-blue-container": "#132D40",
+            "success-green": "#55B887",
+            "success-green-container": "#112F21"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    @layer base {
+      html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #15191D;
+        color: #F4F1E9;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      .pt-safe {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface font-sans text-sm text-on-surface antialiased flex flex-col min-h-screen selection:bg-primary/20">
+<!-- Fixed Top Header -->
+<header class="fixed top-0 w-full z-50 bg-[#15191D]/95 backdrop-blur-md border-b border-border-line pt-safe">
+<div class="h-16 px-4 flex items-center justify-between gap-3">
+<!-- Left: Logo & Metadata -->
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded bg-thermal-amber/10 border border-thermal-amber/30 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px] text-thermal-amber">local_fire_department</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-bold text-sm tracking-tight text-on-surface truncate">FireWatch</span>
+<span class="font-mono text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded bg-analytical-blue-container text-analytical-blue border border-analytical-blue/30 tracking-wider">GIS-NRT</span>
+</div>
+<div class="flex items-center gap-1.5 truncate">
+<span class="w-1.5 h-1.5 rounded-full bg-thermal-red animate-pulse flex-shrink-0"></span>
+<span class="font-mono text-[11px] text-on-surface-variant truncate">NASA FIRMS MODIS/VIIRS Ingestion</span>
+</div>
+</div>
+</div>
+<!-- Right: Operational Controls -->
+<div class="flex items-center gap-1 flex-shrink-0">
+<button aria-label="Upload CSV" class="w-9 h-9 flex items-center justify-center rounded border border-border-line text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+</button>
+<button aria-label="Refresh Telemetry" class="w-9 h-9 flex items-center justify-center rounded border border-border-line text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+</button>
+<div class="flex items-center pl-1">
+<img alt="Analyst Profile" class="w-8 h-8 rounded border border-border-line object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLpYeFSrItb-iW1tU29ngdMs0nfgMe2oBdU09F8A7-qiA6rkYuu2n33qM6YL16rBrxZt7JZcDRtM58aoxXrOiChECKnSX9n1TlWOrk5Eik7da_FJR5ogMH-d0xS_vGEWISxYR5yqbaXZpDAs_sDmMDlqxXnpiMpZ0-um3vsN2mdSwov66O2Lvqfmghekb90QFztLU4CsUkVM6Umq4sgGcFIBDVqpsG5rH3Oapfz1pz"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Console Body -->
+<main class="flex flex-col relative w-full pt-16 pb-20 bg-surface flex-grow">
+<div class="flex flex-col w-full">
+<!-- Live Stream Telemetry Ribbon -->
+<section class="bg-surface-container-low px-4 py-2.5 border-b border-border-line">
+<div class="flex items-center justify-between gap-2 mb-1.5">
+<div class="flex items-center gap-2 min-w-0">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container-high border border-border-line font-mono text-[10px] font-semibold tracking-wider uppercase text-on-surface">
+<span class="w-1.5 h-1.5 rounded-full bg-thermal-red animate-ping"></span>
+              LIVE STREAM
+            </span>
+<span class="font-mono text-[11px] text-on-surface-variant truncate">Acquired 14m ago (VIIRS/MODIS)</span>
+</div>
+<button class="flex items-center gap-1 px-2 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest border border-border-line text-on-surface font-mono text-[11px] transition-colors" id="btn-refresh">
+<span class="material-symbols-outlined text-[13px] text-analytical-blue">refresh</span>
+<span>Sync</span>
+</button>
+</div>
+<p class="text-[12px] text-on-surface-variant mb-1.5 leading-snug">
+          Satellite-derived thermal observations for analyst triage review (VIIRS / MODIS)
+        </p>
+<div class="flex items-center justify-between text-on-surface-variant font-mono text-[11px] pt-0.5">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[13px] text-analytical-blue">schedule</span>
+<span>Window: Last 24h (UTC) • 1,482 Raw records</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-analytical-blue-container border border-analytical-blue/30 text-analytical-blue font-semibold text-[10px]">
+            VIIRS 375m NRT Demo
+          </span>
+</div>
+</section>
+<!-- Metric Matrix (2x2 Compact Console Cards) -->
+<section class="px-4 pt-3">
+<div class="grid grid-cols-2 gap-2">
+<!-- Card 1: Total Observations -->
+<div class="bg-surface-container-high border border-border-line p-3 rounded flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-mono text-[10px] uppercase tracking-wider font-semibold">Total Obs</span>
+<span class="material-symbols-outlined text-[16px] text-analytical-blue">satellite_alt</span>
+</div>
+<div class="my-1.5">
+<span class="font-mono text-2xl font-bold tracking-tight text-on-surface">1,248</span>
+</div>
+<div class="flex items-center gap-1.5 font-mono text-[11px] text-success-green">
+<span class="material-symbols-outlined text-[13px]">check_circle</span>
+<span class="truncate">94.2% valid schema</span>
+</div>
+</div>
+<!-- Card 2: High Priority -->
+<div class="bg-surface-container-high border border-thermal-red/40 p-3 rounded flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 w-16 h-16 bg-thermal-red/5 rounded-full pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<span class="font-mono text-[10px] uppercase tracking-wider font-semibold text-thermal-red">Priority &gt;80</span>
+<span class="px-1.5 py-0.5 rounded bg-thermal-red text-white font-mono text-[9px] font-bold tracking-wider animate-pulse">ACTION</span>
+</div>
+<div class="my-1.5 flex items-baseline gap-1.5">
+<span class="font-mono text-2xl font-bold text-thermal-red">42</span>
+<span class="font-mono text-[11px] text-on-surface-variant">queued</span>
+</div>
+<div class="flex items-center gap-1.5 font-mono text-[11px] text-thermal-red">
+<span class="w-1.5 h-1.5 rounded-full bg-thermal-red"></span>
+<span class="truncate">Needs immediate review</span>
+</div>
+</div>
+<!-- Card 3: Repeat Clusters -->
+<div class="bg-surface-container-high border border-border-line p-3 rounded flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-mono text-[10px] uppercase tracking-wider font-semibold">Repeat Detections</span>
+<span class="material-symbols-outlined text-[16px] text-thermal-amber">hub</span>
+</div>
+<div class="my-1.5">
+<span class="font-mono text-2xl font-bold tracking-tight text-thermal-amber">318</span>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant truncate">
+              Persistent &gt;48h cluster
+            </div>
+</div>
+<!-- Card 4: Invalid Records -->
+<div class="bg-surface-container-high border border-border-line p-3 rounded flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-mono text-[10px] uppercase tracking-wider font-semibold">Rejected Raw</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">filter_alt_off</span>
+</div>
+<div class="my-1.5">
+<span class="font-mono text-2xl font-bold tracking-tight text-on-surface">23</span>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant truncate">
+              Coord / clock delta out
+            </div>
+</div>
+</div>
+</section>
+<!-- Analyst Filter Array -->
+<section class="px-4 pt-3">
+<div class="bg-surface-container border border-border-line p-2.5 rounded">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-thermal-amber">tune</span>
+<span>Analyst Filter Array</span>
+</div>
+<button class="font-mono text-[11px] text-thermal-amber hover:underline" id="filter-reset-btn">
+              Reset All
+            </button>
+</div>
+<!-- Filter Horizontal Scroller -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+<button class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest border border-border-line text-on-surface font-mono text-[11px] whitespace-nowrap transition-colors">
+<span class="material-symbols-outlined text-[13px] text-on-surface-variant">calendar_today</span>
+<span>Today, May 18 (UTC)</span>
+</button>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest border border-border-line text-on-surface font-mono text-[11px] whitespace-nowrap transition-colors">
+<span class="material-symbols-outlined text-[13px] text-on-surface-variant">public</span>
+<span>W-North America (Zone 4)</span>
+</button>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest border border-border-line text-on-surface font-mono text-[11px] whitespace-nowrap transition-colors">
+<span class="w-1.5 h-1.5 rounded-full bg-thermal-red"></span>
+<span>FRP ≥ 15.0 MW</span>
+</button>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded bg-surface-container-high hover:bg-surface-container-highest border border-border-line text-on-surface font-mono text-[11px] whitespace-nowrap transition-colors">
+<span>Conf ≥ 50%</span>
+</button>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded bg-thermal-amber/20 border border-thermal-amber/40 text-thermal-amber font-mono text-[11px] whitespace-nowrap" id="repeat-toggle">
+<span class="material-symbols-outlined text-[13px]">layers</span>
+<span>Repeat Only</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Geospatial Map Viewport (Dark Precision Console Styling) -->
+<section class="px-4 pt-3">
+<div class="relative w-full rounded border border-border-line overflow-hidden bg-[#0F1316]">
+<!-- Map Canvas Background -->
+<div class="relative w-full h-80 bg-cover bg-center brightness-90 contrast-110" data-location="Plumas National Forest, California" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmS1SPiVJGLHpQ3M4UnL4In-eSaWaAFC5sLDf-TrFcHnWFjyRgCskAlxTY5jLfreXSkwdz6Y3DGZ4uIduccH7MqQOGA5jVKCbc6AMVOZth0yH6L1ofS2ZsrYjbwG2iJqNDD1iiQ3U3KZ9i9sBlLh2ofkS0jdoPXCI1TB_NwbQuhCUS4Zbm37lRLrwiVy-mzfoanKXquXOAfSemGPXNlZepRrF1TD6zJ_uJmUanUBcf')">
+<!-- Dark GIS Tactical tint overlay -->
+<div class="absolute inset-0 bg-[#0F1316]/55 pointer-events-none"></div>
+<!-- GIS Navigation Controls (Top Left) -->
+<div class="absolute top-2.5 left-2.5 z-10 flex flex-col gap-0.5 bg-surface-container-high/95 border border-border-line backdrop-blur-md rounded p-0.5 shadow-lg">
+<button class="w-7 h-7 flex items-center justify-center rounded text-on-surface hover:bg-surface-container transition-colors" title="Zoom in">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+<div class="w-full h-px bg-border-line"></div>
+<button class="w-7 h-7 flex items-center justify-center rounded text-on-surface hover:bg-surface-container transition-colors" title="Zoom out">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<div class="w-full h-px bg-border-line"></div>
+<button class="w-7 h-7 flex items-center justify-center rounded text-analytical-blue hover:bg-surface-container transition-colors" title="Locate Region">
+<span class="material-symbols-outlined text-[16px]">my_location</span>
+</button>
+</div>
+<!-- Satellite Layer Selector Pills (Top Right) -->
+<div class="absolute top-2.5 right-2.5 z-10 flex flex-col items-end gap-1">
+<div class="flex items-center gap-1.5 bg-surface-container-high/95 border border-border-line backdrop-blur-md px-2.5 py-1 rounded text-on-surface shadow-md font-mono text-[11px]">
+<span class="w-2 h-2 rounded-full bg-analytical-blue animate-pulse"></span>
+<span class="font-medium">VIIRS I-Band (375m)</span>
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+</div>
+<div class="bg-surface-container-high/90 border border-border-line backdrop-blur-md px-2 py-0.5 rounded text-on-surface-variant font-mono text-[10px]">
+                Cloud: 4% • Overpass: 13:42z
+              </div>
+</div>
+<!-- Geospatial Hotspot Markers (High-contrast circular styling) -->
+<!-- Hotspot 1: High Priority (Critical: FW-8842) -->
+<div class="absolute top-1/2 left-2/5 -translate-x-1/2 -translate-y-1/2 z-20 cursor-pointer group" onclick="selectHotspot('FW-8842')">
+<div class="relative flex items-center justify-center">
+<span class="absolute w-7 h-7 rounded-full bg-thermal-red/25 animate-ping"></span>
+<span class="absolute w-5 h-5 rounded-full bg-thermal-red/40 border border-thermal-red/60"></span>
+<div class="w-3 h-3 rounded-full bg-thermal-red ring-2 ring-[#15191D] shadow-sm"></div>
+<!-- Callout Tooltip -->
+<div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-[#1C2227] border border-thermal-red text-on-surface px-1.5 py-0.5 rounded font-mono text-[10px] whitespace-nowrap shadow-md pointer-events-none">
+                  FW-8842 • 142.6 MW
+                </div>
+</div>
+</div>
+<!-- Hotspot 2: Moderate Priority -->
+<div class="absolute top-1/3 right-1/4 z-10 cursor-pointer" onclick="selectHotspot('FW-8819')">
+<div class="relative flex items-center justify-center">
+<span class="absolute w-4 h-4 rounded-full bg-thermal-amber/30"></span>
+<div class="w-2.5 h-2.5 rounded-full bg-thermal-amber ring-2 ring-[#15191D]"></div>
+</div>
+</div>
+<!-- Hotspot 3: Low / Flare -->
+<div class="absolute bottom-1/4 left-1/4 z-10 cursor-pointer" onclick="selectHotspot('FW-8790')">
+<div class="relative flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-on-surface-variant ring-2 ring-[#15191D]"></div>
+</div>
+</div>
+<!-- Hotspot Cluster Node -->
+<div class="absolute bottom-1/3 right-1/3 z-10 cursor-pointer bg-surface-container-high border border-analytical-blue text-analytical-blue px-2 py-0.5 rounded-full font-mono text-[10px] font-bold flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-[12px]">scatter_plot</span>
+<span>14 pts</span>
+</div>
+<!-- Floating Legend & Scale Bar (Bottom Overlay) -->
+<div class="absolute bottom-2.5 left-2.5 right-2.5 flex items-end justify-between pointer-events-none">
+<!-- Crisp GIS Legend -->
+<div class="bg-surface-container-high/95 border border-border-line backdrop-blur-md px-2.5 py-1.5 rounded shadow pointer-events-auto flex flex-col gap-1 font-mono text-[10px] text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-thermal-red"></span>
+<span>Critical (&gt;80 score)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-thermal-amber"></span>
+<span>Moderate (50-79)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+<span>Low / Flare (&lt;50)</span>
+</div>
+</div>
+<!-- GIS Scale Indicator -->
+<div class="bg-surface-container-high/95 border border-border-line backdrop-blur-md px-2 py-1 rounded shadow text-right font-mono text-[10px] text-on-surface-variant flex flex-col items-end">
+<div class="w-16 h-1 bg-border-line mb-1 relative border border-outline">
+<div class="absolute inset-y-0 left-0 w-1/2 bg-on-surface"></div>
+</div>
+<span>50 km • WGS 84</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Selected Observation Detail Card (Explainable Triage Model) -->
+<section class="px-4 pt-3">
+<div class="bg-surface-container-high border border-border-line rounded p-3.5">
+<!-- Hotspot Header Meta -->
+<div class="flex items-start justify-between gap-3 mb-3">
+<div class="min-w-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-mono text-xs font-bold text-on-surface">Obs ID: FW-8842-VIIRS</span>
+<span class="px-1.5 py-0.5 rounded bg-thermal-red-container border border-thermal-red/50 text-thermal-red font-mono text-[9px] font-bold uppercase tracking-wider">CRITICAL</span>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant">
+                39.8241°N, 121.4429°W • Plumas / Butte Co.
+              </div>
+</div>
+<!-- Large Score Badge -->
+<div class="flex flex-col items-end bg-surface-container border border-border-line px-2.5 py-1 rounded flex-shrink-0">
+<span class="font-mono text-[9px] text-on-surface-variant uppercase tracking-wider">Triage Score</span>
+<div class="flex items-baseline gap-0.5">
+<span class="font-mono text-xl font-bold text-thermal-red">94</span>
+<span class="font-mono text-[11px] text-on-surface-variant">/100</span>
+</div>
+</div>
+</div>
+<!-- Explicit Contribution Stacked Bar -->
+<div class="mb-3">
+<div class="flex items-center justify-between text-on-surface-variant font-mono text-[10px] mb-1">
+<span>CONTRIBUTING FACTORS</span>
+<span class="text-on-surface font-semibold">94 Total Pts</span>
+</div>
+<div class="w-full bg-[#15191D] h-2 rounded overflow-hidden flex gap-0.5 p-0.5 border border-border-line">
+<div class="bg-thermal-red h-full rounded-sm" style="width: 35.1%" title="FRP: +33 pts"></div>
+<div class="bg-analytical-blue h-full rounded-sm" style="width: 25.5%" title="Recency: +24 pts"></div>
+<div class="bg-thermal-amber h-full rounded-sm" style="width: 20.2%" title="Confidence: +19 pts"></div>
+<div class="bg-success-green h-full rounded-sm" style="width: 19.2%" title="Persistence: +18 pts"></div>
+</div>
+</div>
+<!-- Explainability Factors Breakdown -->
+<div class="space-y-1.5 font-mono text-xs mb-3">
+<!-- Factor 1: Radiative Power -->
+<div class="p-2 rounded bg-surface-container border border-border-line flex items-center justify-between gap-2">
+<div class="flex items-start gap-2 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-thermal-red flex-shrink-0 mt-0.5">local_fire_department</span>
+<div>
+<div class="font-semibold text-on-surface text-[11px]">Radiative Power (FRP) • 142.6 MW</div>
+<div class="text-on-surface-variant text-[10px] leading-tight font-sans">Extreme thermal yield above 99th regional percentile</div>
+</div>
+</div>
+<span class="font-bold text-thermal-red whitespace-nowrap text-[11px]">+33 pts</span>
+</div>
+<!-- Factor 2: Temporal Recency -->
+<div class="p-2 rounded bg-surface-container border border-border-line flex items-center justify-between gap-2">
+<div class="flex items-start gap-2 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-analytical-blue flex-shrink-0 mt-0.5">history</span>
+<div>
+<div class="font-semibold text-on-surface text-[11px]">Recency Weight • 18 min ago</div>
+<div class="text-on-surface-variant text-[10px] leading-tight font-sans">Detected via Suomi-NPP ascending night pass</div>
+</div>
+</div>
+<span class="font-bold text-analytical-blue whitespace-nowrap text-[11px]">+24 pts</span>
+</div>
+<!-- Factor 3: Sensor Confidence -->
+<div class="p-2 rounded bg-surface-container border border-border-line flex items-center justify-between gap-2">
+<div class="flex items-start gap-2 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-thermal-amber flex-shrink-0 mt-0.5">verified_user</span>
+<div>
+<div class="font-semibold text-on-surface text-[11px]">Algorithm Confidence • 96%</div>
+<div class="text-on-surface-variant text-[10px] leading-tight font-sans">Clear sky, multi-band thermal consensus confirmed</div>
+</div>
+</div>
+<span class="font-bold text-thermal-amber whitespace-nowrap text-[11px]">+19 pts</span>
+</div>
+<!-- Factor 4: Spatial Repeat Multi-Pass -->
+<div class="p-2 rounded bg-surface-container border border-border-line flex items-center justify-between gap-2">
+<div class="flex items-start gap-2 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-success-green flex-shrink-0 mt-0.5">grain</span>
+<div>
+<div class="font-semibold text-on-surface text-[11px]">Spatial Persistence • 3 Consecutive Passes</div>
+<div class="text-on-surface-variant text-[10px] leading-tight font-sans">Thermal anomaly recurring within 600m centroid over 12h</div>
+</div>
+</div>
+<span class="font-bold text-success-green whitespace-nowrap text-[11px]">+18 pts</span>
+</div>
+</div>
+<!-- Heuristic Limitation Disclaimer -->
+<div class="p-2.5 rounded bg-surface-container border border-border-line mb-3 flex items-start gap-2">
+<span class="material-symbols-outlined text-[15px] text-on-surface-variant flex-shrink-0 mt-0.5">info</span>
+<p class="text-[11px] text-on-surface-variant leading-relaxed">
+<strong class="font-semibold text-on-surface font-mono">Notice:</strong> Priority score is an explainable analyst triage heuristic based on sensor signatures, NOT a confirmed wildfire declaration or validated danger index. Ground/aerial verification required.
+            </p>
+</div>
+<!-- Analyst Operational Actions -->
+<div class="grid grid-cols-2 gap-2 mb-2">
+<button class="flex items-center justify-center gap-1.5 px-3 py-2 rounded bg-success-green text-surface-dim font-mono text-[11px] font-bold hover:opacity-90 transition-opacity" id="btn-verify">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Mark Verified</span>
+</button>
+<button class="flex items-center justify-center gap-1.5 px-3 py-2 rounded bg-surface-container hover:bg-surface-container-highest border border-border-line text-on-surface font-mono text-[11px] font-medium transition-colors" id="btn-flag-false">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">report_off</span>
+<span>Flag Flare / False</span>
+</button>
+</div>
+<!-- Export & Relay Secondary Actions -->
+<div class="flex items-center justify-between pt-1 font-mono text-[11px]">
+<button class="flex items-center gap-1 text-analytical-blue hover:underline">
+<span class="material-symbols-outlined text-[14px]">file_download</span>
+<span>Export GeoJSON</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[14px]">send</span>
+<span>Relay to Incident Lead</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Quick Triage Queue Preview -->
+<section class="px-4 pt-3 pb-6">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-1.5 font-mono text-xs font-semibold text-on-surface uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px] text-thermal-red">priority_high</span>
+<span>High Priority Queue (Top 3)</span>
+</div>
+<a class="font-mono text-[11px] text-thermal-amber hover:underline" href="#">View All 42 →</a>
+</div>
+<div class="space-y-2">
+<!-- Queue Item 1 (Selected) -->
+<div class="bg-surface-container-high border-l-2 border-l-thermal-red border-y border-r border-border-line p-3 rounded flex items-center justify-between gap-3">
+<div class="min-w-0">
+<div class="flex items-center gap-2 mb-0.5">
+<span class="font-mono text-xs font-bold text-on-surface">#1 FW-8842</span>
+<span class="font-mono text-xs font-bold text-thermal-red">94 Score</span>
+<span class="font-mono text-[10px] px-1.5 py-0.2 rounded bg-surface-container border border-border-line text-on-surface-variant">VIIRS-375</span>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant truncate">
+                Butte Co. • 142.6 MW • 18m ago
+              </div>
+</div>
+<button class="px-3 py-1.5 rounded bg-thermal-amber text-surface-dim font-mono text-[11px] font-bold whitespace-nowrap shadow-sm">
+              Current
+            </button>
+</div>
+<!-- Queue Item 2 -->
+<div class="bg-surface-container-high border border-border-line p-3 rounded flex items-center justify-between gap-3">
+<div class="min-w-0">
+<div class="flex items-center gap-2 mb-0.5">
+<span class="font-mono text-xs font-bold text-on-surface">#2 FW-8840</span>
+<span class="font-mono text-xs font-bold text-thermal-red">89 Score</span>
+<span class="font-mono text-[10px] px-1.5 py-0.2 rounded bg-surface-container border border-border-line text-on-surface-variant">MODIS-Terra</span>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant truncate">
+                Trinity Basin • 88.4 MW • 34m ago
+              </div>
+</div>
+<button class="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-container-highest border border-border-line text-on-surface font-mono text-[11px] font-medium whitespace-nowrap transition-colors" onclick="selectHotspot('FW-8840')">
+              Triage
+            </button>
+</div>
+<!-- Queue Item 3 -->
+<div class="bg-surface-container-high border border-border-line p-3 rounded flex items-center justify-between gap-3">
+<div class="min-w-0">
+<div class="flex items-center gap-2 mb-0.5">
+<span class="font-mono text-xs font-bold text-on-surface">#3 FW-8837</span>
+<span class="font-mono text-xs font-bold text-thermal-red">82 Score</span>
+<span class="font-mono text-[10px] px-1.5 py-0.2 rounded bg-surface-container border border-border-line text-on-surface-variant">VIIRS-375</span>
+</div>
+<div class="font-mono text-[11px] text-on-surface-variant truncate">
+                Klamath Ridge • 61.2 MW • 48m ago
+              </div>
+</div>
+<button class="px-3 py-1.5 rounded bg-surface-container hover:bg-surface-container-highest border border-border-line text-on-surface font-mono text-[11px] font-medium whitespace-nowrap transition-colors" onclick="selectHotspot('FW-8837')">
+              Triage
+            </button>
+</div>
+</div>
+</section>
+<!-- Hotspot Interaction Scripts -->
+<script>
+        function selectHotspot(obsId) {
+          const banner = document.getElementById('btn-refresh');
+          if (banner) {
+            banner.classList.add('opacity-50');
+            setTimeout(() => banner.classList.remove('opacity-50'), 300);
+          }
+        }
+
+        // Toggle repeat filter visually
+        const repeatBtn = document.getElementById('repeat-toggle');
+        if (repeatBtn) {
+          repeatBtn.addEventListener('click', function() {
+            this.classList.toggle('bg-thermal-amber/20');
+            this.classList.toggle('bg-surface-container-high');
+            this.classList.toggle('text-thermal-amber');
+            this.classList.toggle('text-on-surface');
+          });
+        }
+
+        // Verification button feedback
+        const verifyBtn = document.getElementById('btn-verify');
+        if (verifyBtn) {
+          verifyBtn.addEventListener('click', function() {
+            const origHTML = this.innerHTML;
+            this.innerHTML = '<span class="material-symbols-outlined text-[16px]">check</span><span>Verified</span>';
+            setTimeout(() => {
+              this.innerHTML = origHTML;
+            }, 1800);
+          });
+        }
+
+        // False positive confirmation feedback
+        const flagBtn = document.getElementById('btn-flag-false');
+        if (flagBtn) {
+          flagBtn.addEventListener('click', function() {
+            const orig = this.innerHTML;
+            this.innerHTML = '<span class="material-symbols-outlined text-[16px] text-thermal-amber">done</span><span>Flagged</span>';
+            setTimeout(() => {
+              this.innerHTML = orig;
+            }, 1500);
+          });
+        }
+      </script>
+</div>
+</main>
+<!-- Dark Console Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-[#15191D]/95 backdrop-blur-md border-t border-border-line" data-active-classes="text-thermal-amber font-medium">
+<div class="flex items-center justify-around h-16 px-1">
+<a class="flex flex-col items-center justify-center w-16 h-12 text-thermal-amber font-medium" data-path="overview-triage" href="#">
+<span class="material-symbols-outlined text-[20px]">radar</span>
+<span class="font-mono text-[10px] mt-1">Overview</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="priority-queue" href="#">
+<span class="material-symbols-outlined text-[20px]">table_chart</span>
+<span class="font-mono text-[10px] mt-1">Queue</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="data-validation" href="#">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+<span class="font-mono text-[10px] mt-1">Validation</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="analytics-trends" href="#">
+<span class="material-symbols-outlined text-[20px]">query_stats</span>
+<span class="font-mono text-[10px] mt-1">Analytics</span>
+</a>
+<a class="flex flex-col items-center justify-center w-16 h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="evaluation-limitations" href="#">
+<span class="material-symbols-outlined text-[20px]">info</span>
+<span class="font-mono text-[10px] mt-1">Caveats</span>
+</a>
+</div>
+</nav>
+</body></html>

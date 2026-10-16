@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "console-bg": "#15191D",
+          "console-surface": "#252C32",
+          "console-surface-low": "#1C2227",
+          "console-surface-high": "#2E373F",
+          "console-border": "#323B43",
+          "console-border-light": "#3F4B55",
+          "text-primary": "#F4F1E9",
+          "text-secondary": "#9BA3AF",
+          "text-muted": "#6C7684",
+          "amber-thermal": "#FFB547",
+          "red-thermal": "#F04438",
+          "blue-analytical": "#68B5E8",
+          "green-success": "#55B887",
+          "surface": "#15191D",
+          "surface-container": "#252C32",
+          "surface-container-low": "#1C2227",
+          "surface-container-high": "#2E373F",
+          "on-surface": "#F4F1E9",
+          "on-surface-variant": "#9BA3AF",
+          "outline": "#323B43",
+          "primary": "#FFB547",
+          "secondary": "#68B5E8",
+          "error": "#F04438"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.375rem",
+          "xl": "0.5rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "gutter": "1rem",
+          "space-xs": "0.25rem",
+          "space-sm": "0.5rem",
+          "space-md": "0.75rem",
+          "space-lg": "1rem",
+          "space-xl": "1.5rem"
+        },
+        "fontFamily": {
+          "headline": ["Space Grotesk", "sans-serif"],
+          "body": ["Manrope", "sans-serif"],
+          "mono": ["JetBrains Mono", "monospace"]
+        }
+      }
+    }
+  }
+</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+      background-color: #15191D;
+      color: #F4F1E9;
+    }
+  </style>
+</head><body class="bg-console-bg font-body text-[13px] text-text-primary antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-[#15191D]/95 backdrop-blur-md border-b border-console-border pt-safe"><div class="h-16 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><img alt="FireWatch Logo" class="h-8 w-auto object-contain flex-shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1VLQ1VaoiA1YXMZ5ADm6EWF0gqihW_vfs6tyV_ENkLcTx3Z-LbVrFYYOSOPbxdLiTTZT7fGMb8oMto0HQjOWc3TcMeuXSW_VXosdpJzCiwpBh68YcjVyvkLncILJxkQLW85RUhNe1bRU99s9ff1UDXlPSm7qJdcOo_z1waq1w6UA7LreYgbvRHgvKP7ClIA-yz8JZMfW8gfhWwAiSR4lbh_42ICs-7RVHbmNj837a7K"/><div class="flex flex-col min-w-0"><div class="flex items-center gap-1.5"><span class="font-headline text-[15px] text-text-primary font-bold tracking-tight truncate">FireWatch</span><span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-console-surface-high border border-console-border text-amber-thermal font-medium uppercase tracking-wide">GIS-NRT</span></div><div class="flex items-center gap-1.5 truncate"><span class="w-1.5 h-1.5 rounded-full bg-red-thermal animate-pulse flex-shrink-0"></span><span class="font-mono text-[11px] text-text-secondary truncate">NASA FIRMS MODIS/VIIRS Active Ingestion</span></div></div></div><div class="flex items-center gap-1 flex-shrink-0"><button aria-label="Upload CSV" class="w-9 h-9 flex items-center justify-center rounded border border-console-border text-text-secondary hover:text-amber-thermal hover:bg-console-surface transition-colors"><span class="material-symbols-outlined text-[18px]">upload_file</span></button><button aria-label="Refresh Telemetry" class="w-9 h-9 flex items-center justify-center rounded border border-console-border text-text-secondary hover:text-amber-thermal hover:bg-console-surface transition-colors"><span class="material-symbols-outlined text-[18px]">sync</span></button><div class="flex items-center pl-1"><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-amber-thermal/40 flex-shrink-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLpYeFSrItb-iW1tU29ngdMs0nfgMe2oBdU09F8A7-qiA6rkYuu2n33qM6YL16rBrxZt7JZcDRtM58aoxXrOiChECKnSX9n1TlWOrk5Eik7da_FJR5ogMH-d0xS_vGEWISxYR5yqbaXZpDAs_sDmMDlqxXnpiMpZ0-um3vsN2mdSwov66O2Lvqfmghekb90QFztLU4CsUkVM6Umq4sgGcFIBDVqpsG5rH3Oapfz1pz"/></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-20 bg-console-bg flex-grow"><div class="flex flex-col w-full px-gutter py-space-sm space-y-space-md">
+<!-- Executive Analytics Header -->
+<section class="bg-console-surface rounded-lg p-space-md border border-console-border shadow-sm">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-console-surface-low border border-console-border text-amber-thermal font-mono text-[11px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-thermal animate-ping"></span>
+          GEOSPATIAL TELEMETRY
+        </span>
+<button class="inline-flex items-center gap-1.5 bg-console-surface-high hover:bg-amber-thermal hover:text-console-bg text-text-primary border border-console-border font-mono text-[11px] px-2.5 py-1 rounded transition-colors active:scale-95" id="pdfExportBtn">
+<span class="material-symbols-outlined text-[15px]">picture_as_pdf</span>
+<span>Export PDF Summary</span>
+</button>
+</div>
+<p class="font-body text-[13px] text-text-secondary mt-1">
+        Temporal frequency, radiative energy profiles, and sensor attribution
+      </p>
+<div class="flex items-center gap-2 mt-1 pt-1.5 border-t border-console-border/70 text-text-secondary">
+<span class="material-symbols-outlined text-[16px] text-blue-analytical flex-shrink-0">date_range</span>
+<span class="font-mono text-[11px] text-text-primary">Last 7 Days (Rolling Window)</span>
+<span class="font-mono text-[11px] text-amber-thermal font-semibold">• 8,420 Cumulative Hotspots</span>
+</div>
+</div>
+</section>
+<!-- Interactive Filter Pill Deck -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 -mx-gutter px-gutter">
+<button class="px-3 py-1 bg-amber-thermal text-console-bg font-semibold rounded font-mono text-[11px] flex items-center gap-1 shadow-sm flex-shrink-0 border border-amber-thermal">
+<span class="material-symbols-outlined text-[14px]">public</span> All Sectors
+</button>
+<button class="px-3 py-1 bg-console-surface hover:bg-console-surface-high text-text-secondary hover:text-text-primary rounded font-mono text-[11px] flex items-center gap-1 flex-shrink-0 border border-console-border">
+<span class="material-symbols-outlined text-[14px] text-amber-thermal">wb_sunny</span> Daytime Scan
+</button>
+<button class="px-3 py-1 bg-console-surface hover:bg-console-surface-high text-text-secondary hover:text-text-primary rounded font-mono text-[11px] flex items-center gap-1 flex-shrink-0 border border-console-border">
+<span class="material-symbols-outlined text-[14px] text-blue-analytical">dark_mode</span> Nocturnal Track
+</button>
+<button class="px-3 py-1 bg-console-surface hover:bg-console-surface-high text-text-secondary hover:text-text-primary rounded font-mono text-[11px] flex items-center gap-1 flex-shrink-0 border border-console-border">
+<span class="material-symbols-outlined text-[14px] text-red-thermal">tune</span> FRP &gt; 50MW
+</button>
+</div>
+<!-- Chart 1: 24h Diurnal Curve -->
+<section class="bg-console-surface rounded-lg p-space-md border border-console-border shadow-sm">
+<div class="flex items-start justify-between mb-space-sm">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-amber-thermal">schedule</span>
+<h2 class="font-headline text-[16px] text-text-primary font-bold">Observations Over Time</h2>
+</div>
+<p class="font-mono text-[11px] text-text-secondary">24h Diurnal Curve • Local Solar Satellite Pass</p>
+</div>
+<span class="font-mono text-[11px] bg-red-thermal/15 border border-red-thermal/40 text-red-thermal px-2 py-0.5 rounded font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-red-thermal animate-pulse"></span>
+        14:00 UTC Peak (412)
+</span>
+</div>
+<!-- Micro telemetry tooltip card -->
+<div class="bg-console-surface-low border border-console-border px-space-sm py-1.5 rounded text-text-primary font-mono text-[11px] flex items-center justify-between mb-space-sm" id="chartTooltip">
+<div class="flex items-center gap-1.5 text-text-secondary">
+<span class="material-symbols-outlined text-[14px] text-blue-analytical">tune</span>
+<span>Selected Interval:</span>
+</div>
+<span class="font-semibold text-amber-thermal">13:30 - 14:30 (Suomi-NPP &amp; Aqua Sync)</span>
+</div>
+<!-- Discrete Stepped Diurnal Chart with Explicit Grid & Axes -->
+<div class="w-full bg-console-surface-low rounded border border-console-border p-space-sm">
+<svg aria-label="Diurnal distribution chart showing discrete observations over 24h" class="w-full h-auto overflow-visible" role="img" viewbox="0 0 340 140">
+<defs>
+<lineargradient id="thermalBarGrad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#FFB547" stop-opacity="0.95"></stop>
+<stop offset="100%" stop-color="#FFB547" stop-opacity="0.25"></stop>
+</lineargradient>
+<lineargradient id="peakBarGradConsole" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#F04438"></stop>
+<stop offset="100%" stop-color="#FFB547"></stop>
+</lineargradient>
+</defs>
+<!-- Horizontal Grid lines & explicit count labels -->
+<line stroke="#323B43" stroke-dasharray="2,2" stroke-width="0.75" x1="28" x2="330" y1="18" y2="18"></line>
+<line stroke="#323B43" stroke-dasharray="2,2" stroke-width="0.75" x1="28" x2="330" y1="48" y2="48"></line>
+<line stroke="#323B43" stroke-dasharray="2,2" stroke-width="0.75" x1="28" x2="330" y1="78" y2="78"></line>
+<line stroke="#323B43" stroke-width="1" x1="28" x2="330" y1="108" y2="108"></line>
+<!-- Vertical interval grid markers -->
+<line stroke="#252C32" stroke-width="0.75" x1="32" x2="32" y1="18" y2="108"></line>
+<line stroke="#252C32" stroke-width="0.75" x1="104" x2="104" y1="18" y2="108"></line>
+<line stroke="#252C32" stroke-width="0.75" x1="185" x2="185" y1="18" y2="108"></line>
+<line stroke="#252C32" stroke-width="0.75" x1="257" x2="257" y1="18" y2="108"></line>
+<line stroke="#252C32" stroke-width="0.75" x1="320" x2="320" y1="18" y2="108"></line>
+<!-- Y Axis Units & Values -->
+<text fill="#6C7684" font-family="JetBrains Mono" font-size="7.5" text-anchor="end" x="24" y="21">400</text>
+<text fill="#6C7684" font-family="JetBrains Mono" font-size="7.5" text-anchor="end" x="24" y="51">200</text>
+<text fill="#6C7684" font-family="JetBrains Mono" font-size="7.5" text-anchor="end" x="24" y="81">50</text>
+<text fill="#6C7684" font-family="JetBrains Mono" font-size="7.5" text-anchor="end" x="24" y="110">0</text>
+<!-- Highlight Region for 13:30 - 14:30 Sync Pass -->
+<rect fill="#68B5E8" fill-opacity="0.08" height="90" stroke="#68B5E8" stroke-dasharray="2,2" stroke-width="0.75" width="28" x="171" y="18"></rect>
+<!-- Stepped / Discrete histogram bars (Thermal Amber & Peak Red) -->
+<rect fill="url(#thermalBarGrad)" height="10" rx="0.5" width="8" x="32" y="98"></rect>
+<rect fill="url(#thermalBarGrad)" height="7" rx="0.5" width="8" x="44" y="101"></rect>
+<rect fill="url(#thermalBarGrad)" height="6" rx="0.5" width="8" x="56" y="102"></rect>
+<rect fill="url(#thermalBarGrad)" height="8" rx="0.5" width="8" x="68" y="100"></rect>
+<rect fill="url(#thermalBarGrad)" height="14" rx="0.5" width="8" x="80" y="94"></rect>
+<rect fill="url(#thermalBarGrad)" height="17" rx="0.5" width="8" x="92" y="91"></rect>
+<rect fill="url(#thermalBarGrad)" height="22" rx="0.5" width="8" x="104" y="86"></rect>
+<rect fill="url(#thermalBarGrad)" height="29" rx="0.5" width="8" x="116" y="79"></rect>
+<rect fill="url(#thermalBarGrad)" height="36" rx="0.5" width="8" x="128" y="72"></rect>
+<rect fill="url(#thermalBarGrad)" height="46" rx="0.5" width="8" x="140" y="62"></rect>
+<rect fill="url(#thermalBarGrad)" height="60" rx="0.5" width="8" x="152" y="48"></rect>
+<rect fill="url(#thermalBarGrad)" height="70" rx="0.5" width="8" x="164" y="38"></rect>
+<rect fill="url(#thermalBarGrad)" height="80" rx="0.5" width="8" x="174" y="28"></rect>
+<!-- Peak 14:00 UTC (412 count) Bar -->
+<rect fill="url(#peakBarGradConsole)" height="92" rx="1" stroke="#F04438" stroke-width="0.5" width="10" x="185" y="16"></rect>
+<circle cx="190" cy="16" fill="#F04438" r="2.5"></circle>
+<rect fill="url(#thermalBarGrad)" height="78" rx="0.5" width="8" x="198" y="30"></rect>
+<rect fill="url(#thermalBarGrad)" height="65" rx="0.5" width="8" x="210" y="43"></rect>
+<rect fill="url(#thermalBarGrad)" height="50" rx="0.5" width="8" x="222" y="58"></rect>
+<rect fill="url(#thermalBarGrad)" height="36" rx="0.5" width="8" x="234" y="72"></rect>
+<rect fill="url(#thermalBarGrad)" height="24" rx="0.5" width="8" x="246" y="84"></rect>
+<rect fill="url(#thermalBarGrad)" height="18" rx="0.5" width="8" x="258" y="90"></rect>
+<rect fill="url(#thermalBarGrad)" height="14" rx="0.5" width="8" x="270" y="94"></rect>
+<rect fill="url(#thermalBarGrad)" height="10" rx="0.5" width="8" x="282" y="98"></rect>
+<rect fill="url(#thermalBarGrad)" height="8" rx="0.5" width="8" x="294" y="100"></rect>
+<rect fill="url(#thermalBarGrad)" height="9" rx="0.5" width="8" x="306" y="99"></rect>
+<rect fill="url(#thermalBarGrad)" height="11" rx="0.5" width="8" x="318" y="97"></rect>
+<!-- Satellite comparison pass indicator (Discrete stepped line in Analytical Blue) -->
+<polyline fill="none" points="32,100 56,103 80,97 104,89 128,76 152,55 174,35 190,20 210,47 234,74 258,91 282,99 306,101 324,98" stroke="#68B5E8" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></polyline>
+<!-- X Axis Labels -->
+<text fill="#9BA3AF" font-family="JetBrains Mono" font-size="8" text-anchor="middle" x="36" y="122">00z</text>
+<text fill="#9BA3AF" font-family="JetBrains Mono" font-size="8" text-anchor="middle" x="108" y="122">06z</text>
+<text fill="#FFB547" font-family="JetBrains Mono" font-size="8.5" font-weight="bold" text-anchor="middle" x="190" y="122">14:00z</text>
+<text fill="#9BA3AF" font-family="JetBrains Mono" font-size="8" text-anchor="middle" x="262" y="122">18z</text>
+<text fill="#9BA3AF" font-family="JetBrains Mono" font-size="8" text-anchor="middle" x="322" y="122">23z</text>
+<!-- Chart Sub-axis Units Legend inside SVG -->
+<text fill="#6C7684" font-family="JetBrains Mono" font-size="7" text-anchor="start" x="28" y="135">Unit: Active Cluster Detections / Local Hour</text>
+</svg>
+</div>
+<!-- Solar pass explanation legend -->
+<div class="mt-space-xs flex items-center justify-between text-text-secondary font-mono text-[11px] pt-1 border-t border-console-border/40">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-red-thermal"></span> S-NPP Nadir (13:30 LT)
+</span>
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-blue-analytical"></span> Aqua Overpass (14:30 LT)
+</span>
+</div>
+</section>
+<!-- Chart 2: FRP Distribution -->
+<section class="bg-console-surface rounded-lg p-space-md border border-console-border shadow-sm">
+<div class="flex items-start justify-between mb-space-xs">
+<div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-amber-thermal">local_fire_department</span>
+<h2 class="font-headline text-[16px] text-text-primary font-bold">Fire Radiative Power (FRP)</h2>
+</div>
+<p class="font-mono text-[11px] text-text-secondary">Megawatts (MW) Intensity Histogram</p>
+</div>
+<span class="material-symbols-outlined text-text-secondary text-[20px]">equalizer</span>
+</div>
+<!-- Stat Callouts -->
+<div class="grid grid-cols-2 gap-space-sm my-space-sm">
+<div class="bg-console-surface-low border border-console-border rounded p-space-sm flex flex-col">
+<span class="font-mono text-[10px] text-text-secondary uppercase tracking-wider">Median FRP</span>
+<span class="font-headline text-[22px] text-amber-thermal font-bold leading-tight">28.4 <span class="font-mono text-[11px] font-normal text-text-secondary">MW</span></span>
+<span class="font-mono text-[10px] text-text-secondary mt-0.5">Std deviation ±12.1</span>
+</div>
+<div class="bg-console-surface-low border border-console-border rounded p-space-sm flex flex-col">
+<span class="font-mono text-[10px] text-text-secondary uppercase tracking-wider">Max Observed</span>
+<span class="font-headline text-[22px] text-red-thermal font-bold leading-tight">342.1 <span class="font-mono text-[11px] font-normal text-text-secondary">MW</span></span>
+<span class="font-mono text-[10px] text-red-thermal mt-0.5 font-medium">Extreme PyroCB Anomaly</span>
+</div>
+</div>
+<!-- Histogram Progress Bars in Thermal Spectrum Colors -->
+<div class="space-y-space-sm mt-space-sm">
+<!-- Bin 1 -->
+<div>
+<div class="flex justify-between font-mono text-[11px] mb-1">
+<span class="text-text-primary">&lt; 10 MW (Low Intensity)</span>
+<span class="text-blue-analytical font-semibold">42% <span class="text-text-muted font-normal">(3,536 pts)</span></span>
+</div>
+<div class="w-full h-2 bg-console-surface-low border border-console-border rounded-full overflow-hidden">
+<div class="h-full bg-blue-analytical rounded-full" style="width: 42%;"></div>
+</div>
+</div>
+<!-- Bin 2 -->
+<div>
+<div class="flex justify-between font-mono text-[11px] mb-1">
+<span class="text-text-primary">10 - 50 MW (Moderate Front)</span>
+<span class="text-amber-thermal font-semibold">38% <span class="text-text-muted font-normal">(3,200 pts)</span></span>
+</div>
+<div class="w-full h-2 bg-console-surface-low border border-console-border rounded-full overflow-hidden">
+<div class="h-full bg-amber-thermal rounded-full" style="width: 38%;"></div>
+</div>
+</div>
+<!-- Bin 3 -->
+<div>
+<div class="flex justify-between font-mono text-[11px] mb-1">
+<span class="text-text-primary">50 - 100 MW (Intense Canopy)</span>
+<span class="text-[#FF8442] font-semibold">14% <span class="text-text-muted font-normal">(1,178 pts)</span></span>
+</div>
+<div class="w-full h-2 bg-console-surface-low border border-console-border rounded-full overflow-hidden">
+<div class="h-full bg-[#FF8442] rounded-full" style="width: 14%;"></div>
+</div>
+</div>
+<!-- Bin 4 -->
+<div>
+<div class="flex justify-between font-mono text-[11px] mb-1">
+<span class="text-red-thermal font-medium">&gt; 100 MW (Extreme Anomaly)</span>
+<span class="text-red-thermal font-bold">6% <span class="text-red-thermal/70 font-normal">(506 pts)</span></span>
+</div>
+<div class="w-full h-2 bg-console-surface-low border border-console-border rounded-full overflow-hidden">
+<div class="h-full bg-red-thermal rounded-full" style="width: 6%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Grid of Donut & Breakdown Cards -->
+<div class="grid grid-cols-1 gap-space-md">
+<!-- Chart 3: Sensor & Satellite Source Breakdown -->
+<section class="bg-console-surface rounded-lg p-space-md border border-console-border shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-blue-analytical">satellite_alt</span>
+<h2 class="font-headline text-[16px] text-text-primary font-bold">Sensor Source Attribution</h2>
+</div>
+<span class="font-mono text-[10px] bg-console-surface-low border border-console-border px-1.5 py-0.5 rounded text-text-secondary">1,248 subset</span>
+</div>
+<div class="flex items-center gap-space-md">
+<!-- SVG Donut Ring with Analytical Blue & Amber Segments -->
+<div class="relative w-28 h-28 flex-shrink-0 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 42 42">
+<!-- Background ring -->
+<circle cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="#1C2227" stroke-width="5.5"></circle>
+<!-- VIIRS S-NPP (54%) - Analytical Blue -->
+<circle cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="#68B5E8" stroke-dasharray="54 46" stroke-dashoffset="0" stroke-width="5.5"></circle>
+<!-- VIIRS NOAA-20 (38%) - Amber Thermal -->
+<circle cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="#FFB547" stroke-dasharray="38 62" stroke-dashoffset="-54" stroke-width="5.5"></circle>
+<!-- MODIS (8%) - Thermal Red -->
+<circle cx="21" cy="21" fill="transparent" r="15.91549430918954" stroke="#F04438" stroke-dasharray="8 92" stroke-dashoffset="-92" stroke-width="5.5"></circle>
+</svg>
+<div class="absolute flex flex-col items-center justify-center text-center">
+<span class="font-headline text-[15px] font-bold text-text-primary leading-none">375m</span>
+<span class="font-mono text-[8px] text-text-secondary tracking-widest mt-0.5">VIIRS DOM</span>
+</div>
+</div>
+<!-- Legend and metrics -->
+<div class="flex-grow space-y-1.5">
+<div class="flex items-center justify-between font-mono text-[11px]">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="w-2.5 h-2.5 rounded-xs bg-blue-analytical flex-shrink-0"></span>
+<span class="text-text-primary truncate">VIIRS S-NPP (375m)</span>
+</div>
+<span class="font-semibold text-text-primary ml-2">54% <span class="text-text-muted font-normal">(674)</span></span>
+</div>
+<div class="flex items-center justify-between font-mono text-[11px]">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="w-2.5 h-2.5 rounded-xs bg-amber-thermal flex-shrink-0"></span>
+<span class="text-text-primary truncate">VIIRS NOAA-20 (375m)</span>
+</div>
+<span class="font-semibold text-text-primary ml-2">38% <span class="text-text-muted font-normal">(474)</span></span>
+</div>
+<div class="flex items-center justify-between font-mono text-[11px]">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="w-2.5 h-2.5 rounded-xs bg-red-thermal flex-shrink-0"></span>
+<span class="text-text-primary truncate">MODIS Aqua/Terra (1km)</span>
+</div>
+<span class="font-semibold text-text-primary ml-2">8% <span class="text-text-muted font-normal">(100)</span></span>
+</div>
+</div>
+</div>
+</section>
+<!-- Chart 4: Confidence Rating Breakdown -->
+<section class="bg-console-surface rounded-lg p-space-md border border-console-border shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-green-success">verified_user</span>
+<h2 class="font-headline text-[16px] text-text-primary font-bold">Algorithmic Confidence</h2>
+</div>
+<span class="font-mono text-[10px] text-text-secondary">FIRMS Quality Mask</span>
+</div>
+<!-- Segmented Stacked Bar -->
+<div class="w-full h-2.5 rounded-full overflow-hidden flex bg-console-surface-low border border-console-border mb-space-sm">
+<div class="h-full bg-green-success" style="width: 58%;" title="High: 58%"></div>
+<div class="h-full bg-amber-thermal" style="width: 34%;" title="Nominal: 34%"></div>
+<div class="h-full bg-console-border-light" style="width: 8%;" title="Low: 8%"></div>
+</div>
+<div class="grid grid-cols-3 gap-space-xs text-center font-mono">
+<div class="bg-console-surface-low border border-console-border p-space-xs rounded">
+<div class="text-green-success font-bold font-headline text-[16px]">58%</div>
+<div class="text-[11px] text-text-primary font-medium">High</div>
+<div class="text-[9px] text-text-secondary">724 detections</div>
+</div>
+<div class="bg-console-surface-low border border-console-border p-space-xs rounded">
+<div class="text-amber-thermal font-bold font-headline text-[16px]">34%</div>
+<div class="text-[11px] text-text-primary font-medium">Nominal</div>
+<div class="text-[9px] text-text-secondary">424 detections</div>
+</div>
+<div class="bg-console-surface-low border border-console-border p-space-xs rounded">
+<div class="text-text-secondary font-bold font-headline text-[16px]">8%</div>
+<div class="text-[11px] text-text-primary font-medium">Sub-pixel</div>
+<div class="text-[9px] text-text-secondary">100 detections</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Priority Score Component Breakdown -->
+<section class="bg-console-surface rounded-lg p-space-md border border-console-border shadow-sm">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-amber-thermal">analytics</span>
+<h2 class="font-headline text-[16px] text-text-primary font-bold">Priority Score Weights</h2>
+</div>
+<span class="font-mono text-[10px] text-amber-thermal bg-amber-thermal/10 border border-amber-thermal/30 px-1.5 py-0.5 rounded font-semibold">Normalized [0-100]</span>
+</div>
+<p class="font-body text-[12px] text-text-secondary mb-space-sm">
+      Comparative contribution across active triage catalog heuristic algorithms
+</p>
+<div class="space-y-space-sm">
+<!-- Factor 1 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center font-mono text-[11px]">
+<span class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[14px] text-red-thermal">whatshot</span>
+        Brightness &amp; Thermal Energy
+      </span>
+<span class="font-semibold text-amber-thermal">34%</span>
+</div>
+<div class="w-full bg-console-surface-low border border-console-border h-2 rounded-full overflow-hidden">
+<div class="bg-amber-thermal h-full rounded-full" style="width: 34%;"></div>
+</div>
+</div>
+<!-- Factor 2 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center font-mono text-[11px]">
+<span class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[14px] text-blue-analytical">repeat</span>
+        Spatial-Temporal Repeat Rate
+      </span>
+<span class="font-semibold text-blue-analytical">28%</span>
+</div>
+<div class="w-full bg-console-surface-low border border-console-border h-2 rounded-full overflow-hidden">
+<div class="bg-blue-analytical h-full rounded-full" style="width: 28%;"></div>
+</div>
+</div>
+<!-- Factor 3 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center font-mono text-[11px]">
+<span class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[14px] text-green-success">update</span>
+        Temporal Recency (&lt;3h Overpass)
+      </span>
+<span class="font-semibold text-green-success">22%</span>
+</div>
+<div class="w-full bg-console-surface-low border border-console-border h-2 rounded-full overflow-hidden">
+<div class="bg-green-success h-full rounded-full" style="width: 22%;"></div>
+</div>
+</div>
+<!-- Factor 4 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-center font-mono text-[11px]">
+<span class="flex items-center gap-1.5 text-text-primary">
+<span class="material-symbols-outlined text-[14px] text-text-secondary">verified</span>
+        Satellite Algorithmic Confidence
+      </span>
+<span class="font-semibold text-text-primary">16%</span>
+</div>
+<div class="w-full bg-console-surface-low border border-console-border h-2 rounded-full overflow-hidden">
+<div class="bg-console-border-light h-full rounded-full" style="width: 16%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Regional Hotspot Distribution & Tactical Map Preview -->
+<section class="bg-console-surface rounded-lg p-space-md border border-console-border shadow-sm">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-amber-thermal">map</span>
+<h2 class="font-headline text-[16px] text-text-primary font-bold">Top Incident Corridors</h2>
+</div>
+<span class="font-mono text-[10px] text-text-secondary">Ranked by Volume</span>
+</div>
+<!-- Geographic reference map container with dark console overlay filter -->
+<div class="w-full h-36 bg-cover bg-center rounded border border-console-border mb-space-sm relative overflow-hidden" data-location="Sierra Nevada, California, USA" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBy1GK57go0R-L6JLRMEdFobUl8jYOu7OtdTs01-H38PNYYdOiX40EaevMA5VHShghqKE6tduhgTDHt0CbDNC9vRD6uneE1i7FWq0qLL3E3Zlep21RMh0Ai1Ns_os7QzNZlqLccKwo360GgWtWveRJLFjEAkCVLj31tWHV806zhLOd8GGU4G-c7ueJI3WM8Jjxx6l3yccZwDGrT3qCyiWfMGscQZxwU-783gEQTgd_X')">
+<!-- Darkening thermal layer overlay -->
+<div class="absolute inset-0 bg-[#15191D]/50 mix-blend-multiply"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#15191D] via-[#15191D]/40 to-transparent flex items-end p-space-sm">
+<div class="flex items-center justify-between w-full">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-red-thermal animate-ping"></span>
+<span class="font-mono text-[11px] font-semibold text-text-primary">Priority Zone 01: Sierra Foothills</span>
+</div>
+<span class="px-2 py-0.5 bg-red-thermal text-white rounded font-mono text-[10px] font-bold">384 Actives</span>
+</div>
+</div>
+</div>
+<!-- Ranked Zones List -->
+<div class="space-y-space-xs font-mono">
+<!-- Zone 1 -->
+<div class="flex items-center justify-between p-2.5 bg-console-surface-low border border-console-border rounded hover:border-console-border-light transition-colors">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-5 h-5 rounded bg-red-thermal text-white text-[11px] flex items-center justify-center font-bold flex-shrink-0">1</span>
+<div class="min-w-0">
+<p class="font-headline text-[13px] text-text-primary font-semibold truncate">Sierra Nevada Foothills, CA</p>
+<p class="text-[10px] text-text-secondary">384 cluster points</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="text-[12px] font-bold text-red-thermal">42.1 MW</span>
+<p class="text-[9px] text-text-secondary">Avg FRP</p>
+</div>
+</div>
+<!-- Zone 2 -->
+<div class="flex items-center justify-between p-2.5 bg-console-surface-low border border-console-border rounded hover:border-console-border-light transition-colors">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-5 h-5 rounded bg-[#FF8442] text-white text-[11px] flex items-center justify-center font-bold flex-shrink-0">2</span>
+<div class="min-w-0">
+<p class="font-headline text-[13px] text-text-primary font-semibold truncate">Willamette National Forest, OR</p>
+<p class="text-[10px] text-text-secondary">214 cluster points</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="text-[12px] font-bold text-[#FF8442]">31.8 MW</span>
+<p class="text-[9px] text-text-secondary">Avg FRP</p>
+</div>
+</div>
+<!-- Zone 3 -->
+<div class="flex items-center justify-between p-2.5 bg-console-surface-low border border-console-border rounded hover:border-console-border-light transition-colors">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-5 h-5 rounded bg-amber-thermal text-console-bg text-[11px] flex items-center justify-center font-bold flex-shrink-0">3</span>
+<div class="min-w-0">
+<p class="font-headline text-[13px] text-text-primary font-semibold truncate">Northern Cascades, WA</p>
+<p class="text-[10px] text-text-secondary">142 cluster points</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="text-[12px] font-bold text-amber-thermal">18.2 MW</span>
+<p class="text-[9px] text-text-secondary">Avg FRP</p>
+</div>
+</div>
+<!-- Zone 4 -->
+<div class="flex items-center justify-between p-2.5 bg-console-surface-low border border-console-border rounded hover:border-console-border-light transition-colors">
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="w-5 h-5 rounded bg-blue-analytical text-console-bg text-[11px] flex items-center justify-center font-bold flex-shrink-0">4</span>
+<div class="min-w-0">
+<p class="font-headline text-[13px] text-text-primary font-semibold truncate">Gila Wilderness, NM</p>
+<p class="text-[10px] text-text-secondary">98 cluster points</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="text-[12px] font-bold text-red-thermal">54.0 MW</span>
+<p class="text-[9px] text-text-secondary">Avg FRP</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Methodological Annotation & Scientific Disclaimer -->
+<footer class="bg-console-surface-low border border-console-border rounded-lg p-space-sm text-text-secondary flex items-start gap-2">
+<span class="material-symbols-outlined text-[17px] text-amber-thermal flex-shrink-0 mt-0.5">info</span>
+<p class="font-mono text-[10px] leading-relaxed">
+      Analytics computed via Pandas aggregation pipelines. FRP values represent estimated instantaneous radiant energy at time of sensor footprint scan. Cloud obscuration and canopy occlusion may attenuate spectral radiance readings.
+</p>
+</footer>
+</div>
+<script>
+  // Simple interaction feedback for PDF summary generation
+  const pdfBtn = document.getElementById('pdfExportBtn');
+  if (pdfBtn) {
+    pdfBtn.addEventListener('click', function() {
+      const originalText = this.innerHTML;
+      this.innerHTML = '<span class="material-symbols-outlined text-[15px] animate-spin">refresh</span><span>Compiling...</span>';
+      this.classList.add('bg-amber-thermal', 'text-console-bg');
+      setTimeout(() => {
+        this.innerHTML = '<span class="material-symbols-outlined text-[15px]">check_circle</span><span>Report Ready</span>';
+        setTimeout(() => {
+          this.innerHTML = originalText;
+          this.classList.remove('bg-amber-thermal', 'text-console-bg');
+        }, 2200);
+      }, 1000);
+    });
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-[#15191D]/95 backdrop-blur-md border-t border-console-border" data-active-classes="text-amber-thermal font-medium"><div class="flex items-center justify-around h-16 px-space-xs"><a class="flex flex-col items-center justify-center w-16 h-12 text-text-secondary hover:text-text-primary transition-colors" data-path="overview-triage" href="#"><span class="material-symbols-outlined text-[20px]">radar</span><span class="font-mono text-[10px] mt-1">Overview</span></a><a class="flex flex-col items-center justify-center w-16 h-12 text-text-secondary hover:text-text-primary transition-colors" data-path="priority-queue" href="#"><span class="material-symbols-outlined text-[20px]">table_chart</span><span class="font-mono text-[10px] mt-1">Queue</span></a><a class="flex flex-col items-center justify-center w-16 h-12 text-text-secondary hover:text-text-primary transition-colors" data-path="data-validation" href="#"><span class="material-symbols-outlined text-[20px]">verified</span><span class="font-mono text-[10px] mt-1">Validation</span></a><a class="flex flex-col items-center justify-center w-16 h-12 text-amber-thermal font-semibold transition-colors" data-path="analytics-trends" href="#"><span class="material-symbols-outlined text-[20px]">query_stats</span><span class="font-mono text-[10px] mt-1">Analytics</span></a><a class="flex flex-col items-center justify-center w-16 h-12 text-text-secondary hover:text-text-primary transition-colors" data-path="evaluation-limitations" href="#"><span class="material-symbols-outlined text-[20px]">info</span><span class="font-mono text-[10px] mt-1">Caveats</span></a></div></nav></body></html>
