@@ -31,11 +31,6 @@ export const ValidationScreen: React.FC<ValidationScreenProps> = ({ onImportComp
   const [isTestingKey, setIsTestingKey] = useState(false);
   const [firmsTestResult, setFirmsTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  useEffect(() => {
-    loadHistory();
-    loadFirmsStatus();
-  }, []);
-
   const loadHistory = async () => {
     try {
       const data = await fetchImportHistory();
@@ -53,6 +48,11 @@ export const ValidationScreen: React.FC<ValidationScreenProps> = ({ onImportComp
       console.error('Failed to load FIRMS status:', err);
     }
   };
+
+  useEffect(() => {
+    loadHistory();
+    loadFirmsStatus();
+  }, []);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

@@ -276,8 +276,16 @@ def get_dashboard_overview(
         conditions.append("region LIKE ?")
         params.append(f"%{region.strip()}%")
     if source_type:
-        conditions.append("source_type = ?")
-        params.append(source_type)
+        st_clean = source_type.strip().lower()
+        if "synth" in st_clean or "demo" in st_clean:
+            conditions.append("(source_type LIKE '%synth%' OR source_type LIKE '%demo%')")
+        elif "csv" in st_clean or "upload" in st_clean or "import" in st_clean:
+            conditions.append("(source_type LIKE '%csv%' OR source_type LIKE '%upload%' OR source_type LIKE '%import%')")
+        elif "live" in st_clean or "firms" in st_clean:
+            conditions.append("source_type = 'LIVE_FIRMS'")
+        else:
+            conditions.append("source_type = ?")
+            params.append(source_type)
     if priority_tier:
         conditions.append("priority_tier = ?")
         params.append(priority_tier)
@@ -513,8 +521,16 @@ def get_observations(
         params.append(f"%{region.strip()}%")
 
     if source_type:
-        conditions.append("source_type = ?")
-        params.append(source_type)
+        st_clean = source_type.strip().lower()
+        if "synth" in st_clean or "demo" in st_clean:
+            conditions.append("(source_type LIKE '%synth%' OR source_type LIKE '%demo%')")
+        elif "csv" in st_clean or "upload" in st_clean or "import" in st_clean:
+            conditions.append("(source_type LIKE '%csv%' OR source_type LIKE '%upload%' OR source_type LIKE '%import%')")
+        elif "live" in st_clean or "firms" in st_clean:
+            conditions.append("source_type = 'LIVE_FIRMS'")
+        else:
+            conditions.append("source_type = ?")
+            params.append(source_type)
 
     if anomaly_type:
         if anomaly_type == "any":

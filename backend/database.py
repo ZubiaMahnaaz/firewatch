@@ -1,8 +1,43 @@
 import sqlite3
 import os
+import shutil
 from typing import Generator
 
-DB_PATH = os.environ.get("FIREWATCH_DB_PATH", os.path.join(os.path.dirname(__file__), "firewatch.db"))
+def resolve_db_path() -> str:
+    # On AWS Lambda / Vercel Serverless, deployment bundle is read-only.
+    is_serverless = bool(
+        os.environ.get("VERCEL") or 
+        os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or 
+        os.environ.get("LAMBDA_TASK_ROOT") or 
+        os.environ.get("VERCEL_ENV")
+    )
+    if is_serverless:
+        target = "/tmp/firewatch.db"
+    else:
+        env_path = os.environ.get("FIREWATCH_DB_PATH")
+        if env_path:
+            target = env_path
+        else:
+            default_path = os.path.join(os.path.dirname(__file__), "firewatch.db")
+            try:
+                test_file = os.path.join(os.path.dirname(__file__), ".write_test")
+                with open(test_file, "w") as f:
+                    f.write("ok")
+                os.remove(test_file)
+                target = default_path
+            except (OSError, PermissionError):
+                target = "/tmp/firewatch.db"
+
+    if target.startswith("/tmp") and not os.path.exists(target):
+        bundled = os.path.join(os.path.dirname(__file__), "firewatch.db")
+        if os.path.exists(bundled):
+            try:
+                shutil.copy2(bundled, target)
+            except Exception:
+                pass
+    return target
+
+DB_PATH = resolve_db_path()
 
 def get_db_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(DB_PATH)

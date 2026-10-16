@@ -358,7 +358,7 @@ export const QueueScreen: React.FC<QueueScreenProps> = ({
                           <span className="px-1.5 py-0.5 rounded bg-[#102A1E] text-[#55B887] border border-[#55B887]/40 text-[9px] font-bold tracking-wider">
                             LIVE FIRMS
                           </span>
-                        ) : obs.source_type === 'CSV_IMPORT' ? (
+                        ) : (obs.source_type?.toLowerCase().includes('csv') || obs.source_type?.toLowerCase().includes('upload')) ? (
                           <span className="px-1.5 py-0.5 rounded bg-[#1A2E3D] text-[#68B5E8] border border-[#68B5E8]/40 text-[9px] font-bold tracking-wider">
                             CSV IMPORT
                           </span>

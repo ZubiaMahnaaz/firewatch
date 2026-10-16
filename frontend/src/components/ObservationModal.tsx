@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Observation } from '../types';
 import { updateObservationReview } from '../api';
 import { X, AlertTriangle } from 'lucide-react';
@@ -14,13 +14,21 @@ export const ObservationModal: React.FC<ObservationModalProps> = ({
   onClose,
   onReviewUpdated
 }) => {
-  if (!observation) return null;
-
-  const [reviewStatus, setReviewStatus] = useState(observation.review_status);
-  const [reviewNotes, setReviewNotes] = useState(observation.review_notes || '');
+  const [reviewStatus, setReviewStatus] = useState(observation?.review_status || 'unreviewed');
+  const [reviewNotes, setReviewNotes] = useState(observation?.review_notes || '');
   const [dismissAnomaly, setDismissAnomaly] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (observation) {
+      setReviewStatus(observation.review_status);
+      setReviewNotes(observation.review_notes || '');
+      setDismissAnomaly(false);
+    }
+  }, [observation]);
+
+  if (!observation) return null;
 
   const handleSaveReview = async () => {
     setIsSaving(true);

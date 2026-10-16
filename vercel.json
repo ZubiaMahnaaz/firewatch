@@ -1,12 +1,28 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm --prefix frontend run build",
-  "outputDirectory": "frontend/dist",
-  "cleanUrls": true,
+  "services": {
+    "frontend": {
+      "root": "frontend"
+    },
+    "firewatch-backend": {
+      "root": ".",
+      "entrypoint": "api/index.py",
+      "buildCommand": "pip install -r backend/requirements.txt"
+    }
+  },
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": {
+        "type": "service",
+        "service": "firewatch-backend"
+      }
+    },
+    {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": {
+        "type": "service",
+        "service": "frontend"
+      }
     }
   ]
 }

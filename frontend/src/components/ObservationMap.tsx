@@ -60,9 +60,12 @@ export const ObservationMap: React.FC<ObservationMapProps> = ({
 
   // Keep latest callbacks/data in refs to avoid recreating the map
   const observationsRef = useRef<Observation[]>(observations);
-  observationsRef.current = observations;
   const onOpenDetailModalRef = useRef(onOpenDetailModal);
-  onOpenDetailModalRef.current = onOpenDetailModal;
+
+  useEffect(() => {
+    observationsRef.current = observations;
+    onOpenDetailModalRef.current = onOpenDetailModal;
+  }, [observations, onOpenDetailModal]);
 
   const [basemapType, setBasemapType] = useState<BasemapType>('osm-dark');
   const [mapFilter, setMapFilter] = useState<'all' | 'critical' | 'repeats'>('all');
